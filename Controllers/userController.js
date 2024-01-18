@@ -60,7 +60,7 @@ const userController = {
             const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: '2h' })
             const transporter = nodemailer.createTransport({
                 service: 'gmail',
-                host: 'smpt.gmail.com',
+                host: 'smtp.gmail.com',
                 auth: {
                     user: "msdrahuljohn@gmail.com",
                     pass: "Google@2002 "
@@ -71,7 +71,7 @@ const userController = {
                 from: { name: 'John', address: 'msdrahuljohn@gmail.com' },
                 to:email,
                 subject: 'Reset Password',
-                text: `https://aesthetic-biscotti-d1a45d.netlify.app/resetpassword/${user._id}/${token}`
+                text: `http://localhost:3001/resetpassword/${user._id}/${token}`
             }
             transporter.sendMail(mailOption, (err, info) => {
                 if (err) {
@@ -110,6 +110,14 @@ const userController = {
         } catch (err) {
           console.error(err);
           res.status(500).json({ message: 'Server error' });
+        }
+      },
+      services:async(req,res)=>{
+        try{
+            
+        }
+        catch(err){
+
         }
       }
 

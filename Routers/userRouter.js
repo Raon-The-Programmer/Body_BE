@@ -5,6 +5,6 @@ userRouter.post('/signup',userController.signUp)
 userRouter.post('/signin',userController.signIn)
 userRouter.post('/forgotpassword',userController.forgotPassword)
 userRouter.post('/resetpassword/:userId/:token', userController.resetPassword);
-
+userRouter.get('/services',userController.services)
 
 module.exports=userRouter
