@@ -1,10 +1,12 @@
 const userController = require('../Controllers/userController')
+const AuthMiddleware = require('../middleware/authMiddleware')
 const userRouter = require('express').Router()
 
 userRouter.post('/signup',userController.signUp)
 userRouter.post('/signin',userController.signIn)
 userRouter.post('/forgotpassword',userController.forgotPassword)
 userRouter.post('/resetpassword/:userId/:token', userController.resetPassword);
-userRouter.get('/services',userController.services)
+userRouter.get('/profile',AuthMiddleware.verifyToken,userController.getProfile)
+
 
 module.exports=userRouter

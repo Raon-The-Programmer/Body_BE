@@ -19,6 +19,7 @@ const userController = {
             passwordHash
         })
         const savedUser = await user.save()
+        console.log(savedUser)
         return res.status(201).json({Message:"User created!!"})
     }
     catch(err){
@@ -112,14 +113,17 @@ const userController = {
           res.status(500).json({ message: 'Server error' });
         }
       },
-      services:async(req,res)=>{
-        try{
-            
+      getProfile: async (req, res) => {
+        try {
+            const userId = req.userId
+            const user = await User.findById(userId, {})
+            console.log("user: ", user)
+            return res.status(200).json(user)
         }
-        catch(err){
-
+        catch (err) {
+            return res.status(500).json({ error: err.message })
         }
-      }
+    }
 
 
 }
