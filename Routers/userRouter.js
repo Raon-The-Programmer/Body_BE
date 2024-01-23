@@ -7,6 +7,6 @@ userRouter.post('/signin',userController.signIn)
 userRouter.post('/forgotpassword',userController.forgotPassword)
 userRouter.post('/resetpassword/:userId/:token', userController.resetPassword);
 userRouter.get('/profile',AuthMiddleware.verifyToken,userController.getProfile)
-
+userRouter.put('/profile',AuthMiddleware.verifyToken,userController.editProfile)
 
 module.exports=userRouter

@@ -43,7 +43,7 @@ const userController = {
                 email:user.email,
                 id:user._id
             }
-            const token = jwt.sign(payload,JWT_SECRET,{expiresIn:'1hr'})
+            const token = jwt.sign(payload,JWT_SECRET,{expiresIn:'10hr'})
             return res.status(201).json({name:user.name,Token:token})
         }
         catch(err){
@@ -119,6 +119,27 @@ const userController = {
             const user = await User.findById(userId, {})
             console.log("user: ", user)
             return res.status(200).json(user)
+        }
+        catch (err) {
+            return res.status(500).json({ error: err.message })
+        }
+    },
+    editProfile: async (req, res) => {
+        try {
+            const userId = req.userId
+            const { name,phone,address } = req.body
+            const user = await User.findByIdAndUpdate(userId, { name,phone,address }, { new: true })
+            return res.status(200).json({ message: "User updated successfully!!", user })
+        }
+        catch (err) {
+            return res.status(500).json({ error: err.message })
+        }
+    },
+    deleteProfile: async (req, res) => {
+        try {
+            const userId = req.userId
+            const user = await User.findByIdAndDelete(userId)
+            return res.status(200).json({ message: "User deleted successsfully!!" })
         }
         catch (err) {
             return res.status(500).json({ error: err.message })
