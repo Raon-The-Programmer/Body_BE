@@ -52,41 +52,46 @@ const userController = {
     },
     forgotPassword: async (req, res) => {
         try {
-            const { email } = req.body
-            const user = await User.findOne({ email: email })
-           
+            const { email } = req.body;
+            const user = await User.findOne({ email });
+    
             if (!user) {
-                return res.status(500).json({ message: "User not Found:(" })
+                return res.status(404).json({ message: "User not found" });
             }
-            const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: '2h' })
+    
+            const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: '2h' });
+    
             const transporter = nodemailer.createTransport({
                 service: 'gmail',
                 host: 'smtp.gmail.com',
                 auth: {
                     user: "msdrahuljohn@gmail.com",
-                    pass: "Google@2002 "
+                    pass: "Google@2002"
                 }
-        
-            })
-            const mailOption = {
+            });
+    
+            const mailOptions = {
                 from: { name: 'John', address: 'msdrahuljohn@gmail.com' },
-                to:email,
+                to: email,
                 subject: 'Reset Password',
                 text: `http://localhost:3001/resetpassword/${user._id}/${token}`
-            }
-            transporter.sendMail(mailOption, (err, info) => {
-                if (err) {
-                    console.log({ error: err })
+            };
+    
+            transporter.sendMail(mailOptions, (error, info) => {
+                if (error) {
+                    console.error("Error sending password reset email:", error);
+                    return res.status(500).json({ message: "Error sending password reset email" });
+                } else {
+                    console.log("Password reset email sent:", info);
+                    return res.status(200).json({ message: "Password reset email sent successfully" });
                 }
-                else {
-                    console.log({ Information: info })
-                }
-            })
-        }
-        catch (err) {
-            return res.status(401).json({ message: "Server error" })
+            });
+        } catch (err) {
+            console.error("Forgot password error:", err);
+            return res.status(500).json({ message: "Server error" });
         }
     },
+    
     resetPassword: async (req, res) => {
         try {
         
